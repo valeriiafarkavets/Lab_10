@@ -1,0 +1,295 @@
+﻿<Window x:Class="Lab_10.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Розріджені матриці"
+        Width="1150" Height="850"
+        MinWidth="950" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        Background="#FFF3F3"
+        FontFamily="Segoe UI"
+        FontSize="14">
+
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#AD4148"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Width" Value="85"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderBrush" Value="#D9A4A8"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#62363A"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="GroupBox">
+            <Setter Property="Foreground" Value="#813139"/>
+            <Setter Property="BorderBrush" Value="#D9A4A8"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#62363A"/>
+            <Setter Property="BorderBrush" Value="#D9A4A8"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FFF0F0"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#F1D6D8"/>
+            <Setter Property="VerticalGridLinesBrush" Value="#F1D6D8"/>
+            <Setter Property="RowHeight" Value="28"/>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#EAC1C4"/>
+            <Setter Property="Foreground" Value="#813139"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="8"/>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="210"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="200"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Margin="5,0,5,10">
+                <TextBlock Text="Розріджені матриці"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#96363D"/>
+
+                <TextBlock Text="Створення, редагування та математичні операції"
+                           Foreground="#94666A"
+                           Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <GroupBox Grid.Row="1" Header="Створення матриці">
+                <WrapPanel VerticalAlignment="Center">
+                    <TextBlock Text="Матриця:" Margin="5"/>
+
+                    <ComboBox ItemsSource="{Binding MatrixNames}"
+                              SelectedItem="{Binding SelectedMatrix, Mode=TwoWay}"
+                              Width="70"
+                              Height="32"
+                              Margin="5"
+                              VerticalContentAlignment="Center"/>
+
+                    <TextBlock Text="Рядки:" Margin="5"/>
+
+                    <TextBox Text="{Binding RowsInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Стовпці:" Margin="5"/>
+
+                    <TextBox Text="{Binding ColumnsInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Content="Створити"
+                            Command="{Binding CreateCommand}"/>
+                </WrapPanel>
+            </GroupBox>
+
+            <GroupBox Grid.Row="2" Header="Редагування вибраної матриці">
+                <WrapPanel>
+                    <TextBlock Text="Рядок:" Margin="5"/>
+
+                    <TextBox Text="{Binding RowInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Стовпець:" Margin="5"/>
+
+                    <TextBox Text="{Binding ColumnInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <TextBlock Text="Значення:" Margin="5"/>
+
+                    <TextBox Text="{Binding ValueInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Content="Додати / змінити"
+                            Command="{Binding AddCommand}"/>
+
+                    <Button Content="Вилучити"
+                            Command="{Binding RemoveCommand}"/>
+                </WrapPanel>
+            </GroupBox>
+
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Grid.Column="0" Header="Матриця A">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Bottom"
+                                   Text="{Binding InfoA}"
+                                   Margin="5"
+                                   FontWeight="SemiBold"/>
+
+                        <DataGrid ItemsSource="{Binding ElementsA}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Рядок"
+                                                    Binding="{Binding Row}"
+                                                    Width="*"/>
+
+                                <DataGridTextColumn Header="Стовпець"
+                                                    Binding="{Binding Column}"
+                                                    Width="*"/>
+
+                                <DataGridTextColumn Header="Значення"
+                                                    Binding="{Binding Value}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Column="1" Header="Матриця B">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Bottom"
+                                   Text="{Binding InfoB}"
+                                   Margin="5"
+                                   FontWeight="SemiBold"/>
+
+                        <DataGrid ItemsSource="{Binding ElementsB}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Рядок"
+                                                    Binding="{Binding Row}"
+                                                    Width="*"/>
+
+                                <DataGridTextColumn Header="Стовпець"
+                                                    Binding="{Binding Column}"
+                                                    Width="*"/>
+
+                                <DataGridTextColumn Header="Значення"
+                                                    Binding="{Binding Value}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </GroupBox>
+            </Grid>
+
+            <GroupBox Grid.Row="4" Header="Операції над матрицями">
+                <WrapPanel>
+                    <Button Content="A + B"
+                            Command="{Binding SumCommand}"/>
+
+                    <Button Content="A × B"
+                            Command="{Binding MultiplyCommand}"/>
+
+                    <Button Content="A == B"
+                            Command="{Binding EqualityCommand}"/>
+
+                    <Button Content="Транспонувати"
+                            Command="{Binding TransposeCommand}"/>
+
+                    <TextBlock Text="Множник:" Margin="12,0,0,0"/>
+
+                    <TextBox Text="{Binding ScalarInput, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Content="Помножити на число"
+                            Command="{Binding ScalarCommand}"/>
+                </WrapPanel>
+            </GroupBox>
+
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <GroupBox Grid.Column="0" Header="Результат обчислення">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Bottom"
+                                   Text="{Binding ResultInfo}"
+                                   FontWeight="SemiBold"
+                                   Margin="5"/>
+
+                        <DataGrid ItemsSource="{Binding ResultElements}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Рядок"
+                                                    Binding="{Binding Row}"
+                                                    Width="*"/>
+
+                                <DataGridTextColumn Header="Стовпець"
+                                                    Binding="{Binding Column}"
+                                                    Width="*"/>
+
+                                <DataGridTextColumn Header="Значення"
+                                                    Binding="{Binding Value}"
+                                                    Width="*"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Column="1" Header="Повідомлення">
+                    <Border Background="White" Padding="12">
+                        <TextBlock Text="{Binding Status}"
+                                   TextWrapping="Wrap"
+                                   VerticalAlignment="Top"/>
+                    </Border>
+                </GroupBox>
+            </Grid>
+
+            <GroupBox Grid.Row="6" Header="Завдання підвищеного рівня">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <WrapPanel>
+                            <Button Content="Імпорт COO"
+                                    Command="{Binding ImportCommand}"/>
+
+                            <Button Content="Експорт COO"
+                                    Command="{Binding ExportCommand}"/>
+
+                            <Button Content="Порівняти пам'ять"
+                                    Command="{Binding MemoryCommand}"/>
+                        </WrapPanel>
+
+                        <TextBlock Text="Імпорт та експорт застосовуються до вибраної матриці."
+                                   TextWrapping="Wrap"
+                                   Foreground="#94666A"
+                                   Margin="5"/>
+                    </StackPanel>
+
+                    <Border Grid.Column="1"
+                            Background="#F5DADB"
+                            CornerRadius="6"
+                            Padding="10"
+                            Margin="5">
+
+                        <TextBlock Text="{Binding MemoryInfo}"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+                </Grid>
+            </GroupBox>
+        </Grid>
+    </ScrollViewer>
+</Window>
